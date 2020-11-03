@@ -14,8 +14,7 @@ public class EmployeePayrollDBService {
 	public List<EmployeePayrollData> readData() {
 		String sql = "SELECT * FROM employee_payroll;";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-		try {
-			Connection connection = this.getConnection();
+		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sql);
 			EmployeePayrollData employeeData = null;
@@ -27,8 +26,6 @@ public class EmployeePayrollDBService {
 				employeeData = new EmployeePayrollData(empId, name, salary, startDate);
 				employeePayrollList.add(employeeData);
 			}
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,4 +47,14 @@ public class EmployeePayrollDBService {
 		return connection;
 	}
 
+	public int updateEmployeeSalary(String name, double salary) {
+		String query = String.format("UPDATE  employee_payroll set salary ='%s' WHERE name='%s';", name, salary);
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			return statement.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

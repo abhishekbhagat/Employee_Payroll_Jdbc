@@ -8,4 +8,12 @@ public class EmployeePayrollService {
 	public List<EmployeePayrollData> readEmployeePayroll() {
 		return this.employeePayrollList = new EmployeePayrollDBService().readData();
 	}
+
+	public Boolean updateEmployeeSalary(String name, double salary) {
+		int result = new EmployeePayrollDBService().updateEmployeeSalary(name, salary);
+		if (result == 0)
+			return false;
+		else
+			return true;
+	}
 }

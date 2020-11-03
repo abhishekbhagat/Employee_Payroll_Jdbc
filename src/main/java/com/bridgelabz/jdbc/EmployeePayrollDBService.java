@@ -3,6 +3,7 @@ package com.bridgelabz.jdbc;
 import java.sql.Connection;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,7 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeePayrollDBService {
-	public List<EmployeePayrollData> readData() {
+	private PreparedStatement employeePayrollDataStatement;
+	private static EmployeePayrollDBService employeePayrollDBService;
+
+	private EmployeePayrollDBService() {
+	}
+
+	public static EmployeePayrollDBService getInstance() {
+		if (employeePayrollDBService == null)
+			employeePayrollDBService = new EmployeePayrollDBService();
+		return employeePayrollDBService;
+	}
+
+	public List<EmployeePayrollData> readData() throws EmployeePayrollServiceException {
 		String sql = "SELECT * FROM employee_payroll;";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
@@ -27,12 +40,13 @@ public class EmployeePayrollDBService {
 				employeePayrollList.add(employeeData);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollServiceException("Not able to read data from employee_payroll",
+					EmployeePayrollServiceException.ExceptionType.UNABLE_TO_READ);
 		}
 		return employeePayrollList;
 	}
 
-	private Connection getConnection() {
+	private Connection getConnection() throws EmployeePayrollServiceException {
 		String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
 		String userName = "root";
 		String password = "Abhi@1234";
@@ -42,19 +56,37 @@ public class EmployeePayrollDBService {
 			connection = DriverManager.getConnection(jdbcURL, userName, password);
 			System.out.println("Connection is established!!!!!!!" + connection);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollServiceException("unable to create connection",
+					EmployeePayrollServiceException.ExceptionType.UNABLE_TO_LOAD_DRIVER);
 		}
 		return connection;
 	}
 
-	public int updateEmployeeSalary(String name, double salary) {
-		String query = String.format("UPDATE  employee_payroll set salary ='%s' WHERE name='%s';", name, salary);
+	public int updateEmployeeSalary(String name, double salary) throws EmployeePayrollServiceException {
+		String query = String.format("UPDATE  employee_payroll set salary ='%.2f' WHERE name='%s';", salary, name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(query);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABLE_TO_UPDATE);
+
 		}
-		return 0;
+
+	}
+
+	public int updateEmployeeSalaryByPreparedStatement(String name, double salary)
+			throws EmployeePayrollServiceException, SQLException {
+		// String query = "UPDATE employee_payroll set salary =? WHERE name=?";
+		try (Connection connection = this.getConnection()) {
+			PreparedStatement statement = connection
+					.prepareStatement("UPDATE  employee_payroll set salary =? WHERE name=?");
+			statement.setDouble(1, salary);
+			statement.setString(2, name);
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABE_TO_UPDATE_USING_PREPARED_STATEMENT);
+		}
 	}
 }

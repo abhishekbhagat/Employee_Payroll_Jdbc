@@ -2,6 +2,7 @@ package com.bridgelabz.jdbc;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,6 +50,17 @@ public class EmployeePayrollServiceTest {
 				.readEmployeePayrollDataByDateRange("2018-01-03", "2018-12-20");
 		System.out.println(employeePayrollData.size());
 		Assert.assertEquals(3, employeePayrollData.size());
+	}
+
+	@Test
+	public void givenDatabase_WhenAverageSalaryRetrievedByGender_ShouldReturn_CorrectValue()
+			throws EmployeePayrollServiceException, SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayroll();
+		Map<String, Double> averageSalaryByGender = employeePayrollService.readAverageSalaryByGender();
+
+		Assert.assertTrue(
+				averageSalaryByGender.get("M").equals(20000.00) && averageSalaryByGender.get("F").equals(93039.00));
 	}
 
 }

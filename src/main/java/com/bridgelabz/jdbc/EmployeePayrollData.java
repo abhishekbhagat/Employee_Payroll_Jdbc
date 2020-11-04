@@ -7,6 +7,15 @@ public class EmployeePayrollData {
 	private String name;
 	private double salary;
 	private LocalDate start;
+	private char gender;
+
+	public char getGender() {
+		return gender;
+	}
+
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
 
 	public int getEmp_id() {
 		return emp_id;

@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeePayrollDBService {
 	private PreparedStatement employeePayrollDataStatement;
@@ -133,5 +135,38 @@ public class EmployeePayrollDBService {
 			employeePayrollList.add(employeeData);
 		}
 		return employeePayrollList;
+	}
+
+	public Double calculateSum() throws SQLException, EmployeePayrollServiceException {
+		try (Connection connection = this.getConnection()) {
+			Double sum = 0d;
+			List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+			PreparedStatement statement = connection.prepareStatement(
+					"SELECT sum(salary) as sum  FROM  employee_payroll WHERE gender ='M' GROUP BY gender");
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				sum = result.getDouble("sum");
+			}
+			return sum;
+		}
+	}
+
+	public Map<String, Double> getAverageSalaryByGender() throws EmployeePayrollServiceException {
+		String sql = "SELECT gender,avg(salary) as avg  FROM  employee_payroll  GROUP BY gender;";
+		Map<String, Double> genderToAverageSalaryMap = new HashMap<>();
+		try (Connection connection = this.getConnection()) {
+			List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while (result.next()) {
+				String gender = result.getString("gender");
+				double salary = result.getDouble("avg");
+				genderToAverageSalaryMap.put(gender, salary);
+			}
+			return genderToAverageSalaryMap;
+		} catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABE_TO_CALCULATE_AVG);
+		}
 	}
 }

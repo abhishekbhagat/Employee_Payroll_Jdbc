@@ -2,6 +2,7 @@ package com.bridgelabz.jdbc;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeePayrollService {
 	private List<EmployeePayrollData> employeePayrollList;
@@ -36,5 +37,13 @@ public class EmployeePayrollService {
 			throws EmployeePayrollServiceException, SQLException {
 		return this.employeePayrollList = EmployeePayrollDBService.getInstance()
 				.retrievePayrollDataByDateRange(startDate, endDate);
+	}
+
+	public Double calculateSum() throws SQLException, EmployeePayrollServiceException {
+		return EmployeePayrollDBService.getInstance().calculateSum();
+	}
+
+	public Map<String, Double> readAverageSalaryByGender() throws EmployeePayrollServiceException, SQLException {
+		return EmployeePayrollDBService.getInstance().getAverageSalaryByGender();
 	}
 }

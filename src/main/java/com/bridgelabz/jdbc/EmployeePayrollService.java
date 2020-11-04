@@ -26,4 +26,15 @@ public class EmployeePayrollService {
 		else
 			return true;
 	}
+
+	public List<EmployeePayrollData> readEmployeePayrollDataByPreparedStatement(String name)
+			throws EmployeePayrollServiceException, SQLException {
+		return this.employeePayrollList = EmployeePayrollDBService.getInstance().retrievePayrollDataByName(name);
+	}
+
+	public List<EmployeePayrollData> readEmployeePayrollDataByDateRange(String startDate, String endDate)
+			throws EmployeePayrollServiceException, SQLException {
+		return this.employeePayrollList = EmployeePayrollDBService.getInstance()
+				.retrievePayrollDataByDateRange(startDate, endDate);
+	}
 }

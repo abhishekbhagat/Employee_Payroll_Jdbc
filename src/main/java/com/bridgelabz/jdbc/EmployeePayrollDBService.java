@@ -77,7 +77,6 @@ public class EmployeePayrollDBService {
 
 	public int updateEmployeeSalaryByPreparedStatement(String name, double salary)
 			throws EmployeePayrollServiceException, SQLException {
-		// String query = "UPDATE employee_payroll set salary =? WHERE name=?";
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection
 					.prepareStatement("UPDATE  employee_payroll set salary =? WHERE name=?");
@@ -88,5 +87,51 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollServiceException("unable to update",
 					EmployeePayrollServiceException.ExceptionType.UNABE_TO_UPDATE_USING_PREPARED_STATEMENT);
 		}
+	}
+
+	public List<EmployeePayrollData> retrievePayrollDataByName(String name)
+			throws EmployeePayrollServiceException, SQLException {
+		try (Connection connection = this.getConnection()) {
+			List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM employee_payroll WHERE name=?");
+			statement.setString(1, name);
+			ResultSet result = statement.executeQuery();
+			employeePayrollList = getEmployeePayrollData(result);
+			return employeePayrollList;
+		} catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABE_TO_UPDATE_USING_PREPARED_STATEMENT);
+		}
+	}
+
+	public List<EmployeePayrollData> retrievePayrollDataByDateRange(String startDate, String endDate)
+			throws EmployeePayrollServiceException, SQLException {
+		try (Connection connection = this.getConnection()) {
+			List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+			PreparedStatement statement = connection
+					.prepareStatement("select * from employee_payroll where start between ? and date ? ");
+			statement.setString(1, startDate);
+			statement.setString(2, endDate);
+			ResultSet result = statement.executeQuery();
+			employeePayrollList = getEmployeePayrollData(result);
+			return employeePayrollList;
+		} catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABE_TO_UPDATE_USING_PREPARED_STATEMENT);
+		}
+	}
+
+	public List<EmployeePayrollData> getEmployeePayrollData(ResultSet result) throws SQLException {
+		EmployeePayrollData employeeData = null;
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		while (result.next()) {
+			int empId = result.getInt("id");
+			double salary = result.getDouble("salary");
+			LocalDate startDate = result.getDate("start").toLocalDate();
+			String name = result.getString("name");
+			employeeData = new EmployeePayrollData(empId, name, salary, startDate);
+			employeePayrollList.add(employeeData);
+		}
+		return employeePayrollList;
 	}
 }

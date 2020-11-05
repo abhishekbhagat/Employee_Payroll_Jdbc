@@ -188,4 +188,41 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollData;
 	}
+	public EmployeePayrollData addEmployeeToPayrollUc8(int id,String name, double salary, LocalDate startDate, String gender) throws EmployeePayrollServiceException, SQLException {
+		EmployeePayrollData employeePayrollData =null;
+		Connection connection=null;
+		connection = this.getConnection();
+		try (Statement statement = connection.createStatement()) {
+			String sql=String.format("INSERT INTO employee_payroll(id,name,gender,salary,start) "
+					+ " VALUES('%s','%s','%s','%s','%s')",id,name,gender,salary,Date.valueOf(startDate));
+			int rowAffected = statement.executeUpdate(sql);
+			if(rowAffected==1) {
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABE_TO_CALCULATE_AVG);
+		}
+		try(Statement statement=connection.createStatement()){
+			double deductions=salary*0.2;
+			double taxablePay=salary-deductions;
+			double tax=taxablePay*0.1;
+			double netPay=salary-tax;
+			String sql=String.format("INSERT INTO payroll(emp_id,basic_pay,deductions,taxable_Pay,tax,net_pay) "
+					+ " VALUES('%s','%s','%s','%s','%s','%s')",id,salary,deductions,taxablePay,tax,netPay);
+			int rowAffected = statement.executeUpdate(sql);
+			if(rowAffected==1) {
+             employeePayrollData=new EmployeePayrollData(id,name,salary,startDate,gender);
+			}
+			
+		}
+		catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to add new employee",
+					EmployeePayrollServiceException.ExceptionType.UNABLE_TO_ADD_NEW_EMPLOYEE);
+		}
+		finally {
+			if(connection!=null) connection.close();
+		}
+		return employeePayrollData;
+		
+	}
 }

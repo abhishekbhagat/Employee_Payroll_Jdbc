@@ -53,6 +53,10 @@ public class EmployeePayrollService {
 		employeePayrollList.add(EmployeePayrollDBService.getInstance().addEmployeeToPayroll(id,name,salary,startDate,gender));
 		
 	}
+	public void addNewEmployeeToPayrollUc8(int id,String name, double salary, LocalDate startDate, String gender) throws EmployeePayrollServiceException, SQLException {
+		employeePayrollList.add(EmployeePayrollDBService.getInstance().addEmployeeToPayrollUc8(id,name,salary,startDate,gender));
+		
+	}
 
 	public boolean checkEmployeePayrollInSyncWithDb(String name) {
 		List<EmployeePayrollData>employee= employeePayrollList

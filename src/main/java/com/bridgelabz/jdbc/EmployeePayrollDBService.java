@@ -1,7 +1,7 @@
 package com.bridgelabz.jdbc;
 
 import java.sql.Connection;
-
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -168,5 +168,24 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollServiceException("unable to update",
 					EmployeePayrollServiceException.ExceptionType.UNABE_TO_CALCULATE_AVG);
 		}
+	}
+
+	public EmployeePayrollData addEmployeeToPayroll(int id,String name, double salary, LocalDate startDate, String gender) throws EmployeePayrollServiceException {
+		int employeeId=-1;
+		EmployeePayrollData employeePayrollData =null;
+		String sql=String.format("INSERT INTO employee_payroll(id,name,gender,salary,start) "
+				+ " VALUES('%s','%s','%s','%s','%s')",id,name,gender,salary,Date.valueOf(startDate));
+		try (Connection connection = this.getConnection()) {
+			List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+			Statement statement = connection.createStatement();
+			int rowAffected = statement.executeUpdate(sql);
+			if(rowAffected==1) {
+             employeePayrollData=new EmployeePayrollData(id,name,salary,startDate,gender);
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollServiceException("unable to update",
+					EmployeePayrollServiceException.ExceptionType.UNABE_TO_CALCULATE_AVG);
+		}
+		return employeePayrollData;
 	}
 }

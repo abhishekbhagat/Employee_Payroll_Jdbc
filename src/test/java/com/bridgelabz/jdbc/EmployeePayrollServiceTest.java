@@ -1,6 +1,7 @@
 package com.bridgelabz.jdbc;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,19 @@ public class EmployeePayrollServiceTest {
 
 		Assert.assertTrue(
 				averageSalaryByGender.get("M").equals(20000.00) && averageSalaryByGender.get("F").equals(93039.00));
+	}
+	/**
+	 * uc7
+	 * @throws EmployeePayrollServiceException
+	 * @throws SQLException 
+	 */
+	@Test
+	public void givenDatabase_WhenAddedNewEmployee_ShouldSyncWith() throws EmployeePayrollServiceException, SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayroll();
+		employeePayrollService.addNewEmployeeToPayroll(5,"Mark",30000,LocalDate.now(),"M");
+		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDb("");
+		Assert.assertTrue(result);
 	}
 
 }

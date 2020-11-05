@@ -76,6 +76,11 @@ public class EmployeePayrollServiceTest {
 		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDb("");
 		Assert.assertTrue(result);
 	}
+	/**
+	 * uc8
+	 * @throws EmployeePayrollServiceException
+	 * @throws SQLException
+	 */
 	public void givenDatabase_WhenAddedNewEmployeeAlsoInPayrollDetails_ShouldSyncWith() throws EmployeePayrollServiceException, SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayroll();

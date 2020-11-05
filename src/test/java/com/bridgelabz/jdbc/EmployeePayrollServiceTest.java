@@ -68,23 +68,11 @@ public class EmployeePayrollServiceTest {
 	 * @throws EmployeePayrollServiceException
 	 * @throws SQLException 
 	 */
-	@Test
-	public void givenDatabase_WhenAddedNewEmployee_ShouldSyncWith() throws EmployeePayrollServiceException, SQLException {
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayroll();
-		employeePayrollService.addNewEmployeeToPayroll(5,"Mark",30000,LocalDate.now(),"M");
-		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDb("");
-		Assert.assertTrue(result);
-	}
-	/**
-	 * uc8
-	 * @throws EmployeePayrollServiceException
-	 * @throws SQLException
-	 */
+	
 	public void givenDatabase_WhenAddedNewEmployeeAlsoInPayrollDetails_ShouldSyncWith() throws EmployeePayrollServiceException, SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayroll();
-		employeePayrollService.addNewEmployeeToPayrollUc8(7,"Rahul",30200,LocalDate.now(),"M");
+		employeePayrollService.addNewEmployeeToPayroll(7,"Capgemini",410,1001,"cse","rahul",30200,"katras",LocalDate.now(),"M");
 		
 		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDb("");
 		Assert.assertTrue(result);

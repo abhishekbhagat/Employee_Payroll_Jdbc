@@ -63,18 +63,22 @@ public class EmployeePayrollServiceTest {
 		Assert.assertTrue(
 				averageSalaryByGender.get("M").equals(20000.00) && averageSalaryByGender.get("F").equals(93039.00));
 	}
+
 	/**
 	 * uc7
+	 * 
 	 * @throws EmployeePayrollServiceException
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	
-	public void givenDatabase_WhenAddedNewEmployeeAlsoInPayrollDetails_ShouldSyncWith() throws EmployeePayrollServiceException, SQLException {
+
+	public void givenDatabase_WhenAddedNewEmployeeAlsoInPayrollDetails_ShouldSyncWith()
+			throws EmployeePayrollServiceException, SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayroll();
-		employeePayrollService.addNewEmployeeToPayroll(7,"Capgemini",410,1001,"cse","rahul",30200,"katras",LocalDate.now(),"M");
-		
-		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDb("");
+		employeePayrollService.addNewEmployeeToPayroll(7, "Capgemini", 410, 1001, "cse", "rahul", 30200, "katras",
+				LocalDate.now(), "M");
+
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDb("");
 		Assert.assertTrue(result);
 	}
 

@@ -49,12 +49,14 @@ public class EmployeePayrollService {
 		return EmployeePayrollDBService.getInstance().getAverageSalaryByGender();
 	}
 
-	public void addNewEmployeeToPayroll(int emp_Id,String companyName,int comapany_Id,int dept_id,String dept_Name,String name, double salary, String address, LocalDate startDate,
-	String gender) throws EmployeePayrollServiceException, SQLException {
-		employeePayrollList.add(EmployeePayrollDBService.getInstance().addEmployeeToPayroll(emp_Id,companyName,comapany_Id, dept_id, dept_Name, name,  salary,address, startDate,
-						gender));
+	public void addNewEmployeeToPayroll(int emp_Id, String companyName, int comapany_Id, int dept_id, String dept_Name,
+			String name, double salary, String address, LocalDate startDate, String gender)
+			throws EmployeePayrollServiceException, SQLException {
+		employeePayrollList.add(EmployeePayrollDBService.getInstance().addEmployeeToPayroll(emp_Id, companyName,
+				comapany_Id, dept_id, dept_Name, name, salary, address, startDate, gender));
 
 	}
+
 	public boolean checkEmployeePayrollInSyncWithDb(String name) {
 		List<EmployeePayrollData> employee = employeePayrollList.stream()
 				.filter(employeepayroll -> employeepayroll.getName().equals(name)).collect(Collectors.toList());

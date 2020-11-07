@@ -2,11 +2,17 @@ package com.bridgelabz.jdbc;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 public class EmployeePayrollServiceTest {
 
@@ -64,13 +70,6 @@ public class EmployeePayrollServiceTest {
 				averageSalaryByGender.get("M").equals(20000.00) && averageSalaryByGender.get("F").equals(93039.00));
 	}
 
-	/**
-	 * uc7
-	 * 
-	 * @throws EmployeePayrollServiceException
-	 * @throws SQLException
-	 */
-
 	public void givenDatabase_WhenAddedNewEmployeeAlsoInPayrollDetails_ShouldSyncWith()
 			throws EmployeePayrollServiceException, SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
@@ -78,7 +77,7 @@ public class EmployeePayrollServiceTest {
 		employeePayrollService.addNewEmployeeToPayroll(7, "Capgemini", 410, 1001, "cse", "rahul", 30200, "katras",
 				LocalDate.now(), "M");
 
-		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDb("");
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDb("rahul");
 		Assert.assertTrue(result);
 	}
 

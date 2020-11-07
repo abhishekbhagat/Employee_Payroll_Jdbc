@@ -198,7 +198,7 @@ public class EmployeePayrollDBService {
 			if (rowAffected == 1) {
 			}
 		} catch (SQLException e) {
-            connection.rollback();
+			connection.rollback();
 			throw new EmployeePayrollServiceException("unable to update",
 					EmployeePayrollServiceException.ExceptionType.UNABE_TO_CALCULATE_AVG);
 		}
@@ -235,7 +235,7 @@ public class EmployeePayrollDBService {
 					dept_Name);
 			int rowAffected = statement.executeUpdate(sql);
 			if (rowAffected == 1) {
-  			}
+			}
 		} catch (SQLException e) {
 			connection.rollback();
 			throw new EmployeePayrollServiceException("unable to add new employee",
@@ -252,8 +252,11 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollServiceException("unable to add new employee",
 					EmployeePayrollServiceException.ExceptionType.UNABLE_TO_ADD_NEW_EMPLOYEE);
 		}
-
-		finally {
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 			if (connection != null)
 				connection.close();
 		}

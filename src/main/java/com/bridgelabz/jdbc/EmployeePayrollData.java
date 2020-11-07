@@ -10,11 +10,13 @@ public class EmployeePayrollData {
 	private LocalDate start;
 	private String gender;
 	private int company_Id;
-    private String address;
-    private List<String> deptName;
-    public void setAddress(String address) {
-    	this.address=address;
-    }
+	private String address;
+	private List<String> deptName;
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public int getCompany_Id() {
 		return company_Id;
 	}
@@ -73,12 +75,12 @@ public class EmployeePayrollData {
 
 	public EmployeePayrollData(int emp_id, String name, String address, String gender, double salary, int company_Id,
 			LocalDate start) {
-		this.address=address;
+		this.address = address;
 		this.emp_id = emp_id;
 		this.name = name;
 		this.salary = salary;
 		this.start = start;
-		this.gender=gender;
+		this.gender = gender;
 	}
 
 }
